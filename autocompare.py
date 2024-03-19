@@ -1,4 +1,3 @@
-from pathlib import Path
 from zipfile import ZipFile
 import sys, subprocess, time
 
@@ -33,11 +32,13 @@ for i, code in enumerate(codes):
         out = p.communicate(input=test_set[0], timeout=5)[0]
         p.wait(10000)
         end = time.time()
-        runtimes[i].append(end-start)
+        runtimes[i].append(end - start)
         if out == test_set[1]:
-            passed_tests.append(f"Question {i} test {j}")
+            passed_tests.append(f"Question {i+1} test {j+1}")
         else:
-            failed_tests.append(f"Question {i} test {j}")
+            failed_tests.append(f"Question {i+1} test {j+1}")
+            print(test_set[0].decode("utf-8"))
+            print(out)
 
 if len(failed_tests) == 0 and len(passed_tests) == sum(map(len, tests)):
     print("All tests pass!")
