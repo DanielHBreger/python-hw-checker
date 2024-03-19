@@ -26,11 +26,13 @@ failed_tests = []
 for i, code in enumerate(codes):
     for j, test_set in enumerate(tests[i]):
         start = time.time()
-        p = subprocess.Popen(
-            [sys.executable, code], stdin=subprocess.PIPE, stdout=subprocess.PIPE
-        )
-        out = p.communicate(input=test_set[0], timeout=5)[0]
-        p.wait(10000)
+        try:
+            p = subprocess.Popen(
+                [sys.executable, code], stdin=subprocess.PIPE, stdout=subprocess.PIPE
+            )
+            out = p.communicate(input=test_set[0], timeout=5)[0]
+        except subprocess.TimeoutExpired as e:
+            print(f"Runtime exceeded on Q{i+1} test {j+1}")
         end = time.time()
         runtimes[i].append(end - start)
         if out == test_set[1]:
@@ -38,7 +40,7 @@ for i, code in enumerate(codes):
         else:
             failed_tests.append(f"Question {i+1} test {j+1}")
             print(test_set[0].decode("utf-8"))
-            print(out)
+            print(out.decode("utf-8"))
 
 if len(failed_tests) == 0 and len(passed_tests) == sum(map(len, tests)):
     print("All tests pass!")
