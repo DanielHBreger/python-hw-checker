@@ -33,9 +33,17 @@ for i, code in enumerate(codes):
             out = p.communicate(input=test_set[0], timeout=5)[0]
         except subprocess.TimeoutExpired as e:
             print(f"Runtime exceeded on Q{i+1} test {j+1}")
+        p.kill()
         end = time.time()
         runtimes[i].append(end - start)
-        if out.decode("utf-8") == test_set[1].decode("utf-8"):
+        print("-"*20)
+        print(out)
+        print("-"*5)
+        print(test_set[0])
+        print("-"*5)
+        print(test_set[1])
+        print("-"*20)
+        if out.decode("utf-8").rstrip() == test_set[1].decode("utf-8").rstrip():
             passed_tests.append(f"Question {i+1} test {j+1}")
         else:
             failed_tests.append(f"Question {i+1} test {j+1}")
@@ -55,4 +63,4 @@ else:
 print("runtimes:")
 for i, q in enumerate(runtimes):
     for j, run in enumerate(q):
-        print(f"Q{i+1} test {j+1}: {run:.2f}s")
+        print(f"Q{i+1} test {j+1}: {run:.3f}s")
