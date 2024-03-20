@@ -35,7 +35,7 @@ for i, code in enumerate(codes):
             print(f"Runtime exceeded on Q{i+1} test {j+1}")
         end = time.time()
         runtimes[i].append(end - start)
-        if out == test_set[1]:
+        if out.decode("utf-8") == test_set[1].decode("utf-8"):
             passed_tests.append(f"Question {i+1} test {j+1}")
         else:
             failed_tests.append(f"Question {i+1} test {j+1}")
